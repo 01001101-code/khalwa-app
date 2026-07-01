@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>خُلوة — مساحتك الروحانية</title>
+<meta name="description" content="تطبيق إسلامي متكامل: قرآن كريم، أذكار، أوقات الصلاة، القبلة، أسماء الله الحسنى، الفقه، وسيرة النبي ﷺ"/>
+<meta name="theme-color" content="#0E2A21"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="خُلوة"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=El+Messiri:wght@500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/app.css"/>
+<link rel="stylesheet" href="css/app-upgrade.css"/>
+<link rel="stylesheet" href="css/app-clarity.css"/>
+<link rel="stylesheet" href="css/app-bustan-tawbah.css"/>
+</head>
+<body>
+
+<a href="#mainContent" class="skip-link">تخطّي إلى المحتوى الرئيسي</a>
+
+<!-- ══════════════════════════════════════════
+     SPLASH
+══════════════════════════════════════════ -->
+<div class="splash" id="splash" role="status" aria-label="جاري التحميل">
+  <div class="splash-gem">🕌</div>
+  <div class="splash-name">خُلوة</div>
+  <div class="splash-tagline">مساحتك الروحانية</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ONBOARDING
+══════════════════════════════════════════ -->
+<div class="onboard" id="onboardWrap" role="dialog" aria-label="مرحباً بك">
+  <div class="ob-track">
+    <div class="ob-slide on">
+      <div class="ob-art">🤲</div>
+      <h2 class="ob-h">أهلاً بك في خُلوة</h2>
+      <p class="ob-p">مساحة رقمية هادئة تُقرّبك من الله بأسلوب عصري ومريح</p>
+    </div>
+    <div class="ob-slide">
+      <div class="ob-art">📖</div>
+      <h2 class="ob-h">القرآن الكريم</h2>
+      <p class="ob-p">اقرأ كل السور مع تفسير ميسّر، واستمع بأصوات أجمل القراء</p>
+    </div>
+    <div class="ob-slide">
+      <div class="ob-art">🕌</div>
+      <h2 class="ob-h">أوقات الصلاة</h2>
+      <p class="ob-p">مواقيت دقيقة حسب موقعك واتجاه القبلة ببوصلة ذكية</p>
+    </div>
+    <div class="ob-slide">
+      <div class="ob-art">📿</div>
+      <h2 class="ob-h">رفيقك الروحاني</h2>
+      <p class="ob-p">أذكار شاملة، مسبحة رقمية، سيرة النبي ﷺ، قصص الأنبياء والصحابة</p>
+    </div>
+  </div>
+  <div class="ob-foot">
+    <div class="ob-dots">
+      <div class="ob-dot on"></div><div class="ob-dot"></div>
+      <div class="ob-dot"></div><div class="ob-dot"></div>
+    </div>
+    <button class="btn btn-primary btn-full" style="font-size:16px;padding:15px" id="obBtn" onclick="nextOb()">التالي</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SEARCH OVERLAY
+══════════════════════════════════════════ -->
+<div class="search-overlay" id="searchOverlay" role="search">
+  <div class="search-hd">
+    <input class="search-inp" id="searchInp" type="search" placeholder="ابحث في القرآن، الأحاديث، الأنبياء، الصحابة..." oninput="handleSearch(this.value)" autocomplete="off"/>
+    <button class="btn btn-sec btn-sm" onclick="closeSearch()">✕</button>
+  </div>
+  <div id="searchResults">
+    <div class="empty" style="padding:24px">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-title">ابدأ البحث</div>
+      <div class="empty-text">ابحث في كل محتوى التطبيق</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL OVERLAY
+══════════════════════════════════════════ -->
+<div class="overlay" id="overlayWrap" onclick="if(event.target===this)closeSheet()">
+  <div class="sheet" id="sheetContent"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════════ -->
+<div class="app" id="mainContent">
+
+  <!-- ── HEADER ─────────────────────────────── -->
+  <header class="hdr">
+    <div class="hdr-in">
+      <div class="hdr-brand">
+        <div class="hdr-gem">🌙</div>
+        <div>
+          <div class="hdr-title">خُلوة</div>
+        </div>
+      </div>
+      <div class="hdr-actions">
+        <button class="hdr-btn" onclick="openSearch()" aria-label="بحث">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <button class="hdr-btn" onclick="toggleTheme()" aria-label="تبديل المظهر">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button class="hdr-btn" onclick="navTo('profile')" aria-label="ملفي الشخصي">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: HOME
+  ══════════════════════════════════════════ -->
+  <section class="page on" id="pg-home">
+
+    <!-- Stats Strip -->
+    <div class="sec-label">إنجازك المستمر</div>
+    <div class="stats-strip">
+      <div class="stat-pill"><span class="stat-icon">🔥</span><div><div class="stat-val" id="statStreak">٠</div><div class="stat-lbl">يوم متواصل</div></div></div>
+      <div class="stat-pill"><span class="stat-icon">🌙</span><div><div class="stat-val" id="statKh">٠</div><div class="stat-lbl">خلوة</div></div></div>
+      <div class="stat-pill"><span class="stat-icon">📿</span><div><div class="stat-val" id="statDhikr">٠</div><div class="stat-lbl">ذكر</div></div></div>
+    </div>
+
+    <!-- ═══ بطاقة الختمة السريعة (Khatmah Quick Widget) ═══ -->
+    <div class="sec-label">ختمتك</div>
+    <div id="homeKhatmahWidget" class="home-block"></div>
+
+    <!-- ═══ صفّ بطاقات Mini للنظام الروحاني ═══ -->
+    <div class="sec-label">روحانياتك اليوم</div>
+    <div class="home-ruhani-row home-block">
+      <div id="homeBustanMini" class="home-ruhani-col"></div>
+      <div id="homeDuaMini" class="home-ruhani-col"></div>
+      <div id="homeTawbahMini" class="home-ruhani-col"></div>
+      <div id="homeFocusMini" class="home-ruhani-col"></div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="sec-label">اختصارات سريعة</div>
+    <div class="quick-grid quick-grid-4">
+      <button class="quick-btn" onclick="navTo('quran')">
+        <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+        <span class="quick-lbl">القرآن</span>
+      </button>
+      <button class="quick-btn" onclick="navTo('adhkar')">
+        <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <span class="quick-lbl">الأذكار</span>
+      </button>
+      <button class="quick-btn" onclick="navTo('qibla')">
+        <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h2M19 12h2M12 3v2M12 19v2"/><circle cx="12" cy="12" r="4"/><polygon points="12 2 14 6 12 4 10 6" fill="currentColor"/></svg></div>
+        <span class="quick-lbl">القبلة</span>
+      </button>
+      <button class="quick-btn" onclick="navTo('library')">
+        <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <span class="quick-lbl">المكتبة</span>
+      </button>
+    </div>
+
+    <!-- إذاعة القرآن الكريم المصرية - مباشرة في الواجهة الرئيسية -->
+    <div class="sec-label">استماع مباشر</div>
+    <div class="card home-radio-card">
+      <div class="home-radio-header">
+        <span style="font-size:20px">📻</span>
+        <div>
+          <div style="font-size:15px;font-weight:800;color:var(--tx1)">إذاعة القرآن الكريم</div>
+          <div style="font-size:11px;color:var(--tx3)">مصر FM 98.2 — بث مباشر</div>
+        </div>
+      </div>
+      <div id="homeRadioWidget"></div>
+    </div>
+
+    <!-- Verse of the Day -->
+    <div class="verse-hero">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px">
+        <div class="verse-label" style="margin-bottom:0">⭐ آية اليوم</div>
+        <button onclick="KHALWA.shuffleVerseOfDay()" style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;padding:5px 12px;border-radius:var(--rfull);font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px">🔄 آية أخرى</button>
+      </div>
+      <div class="verse-text" id="homeVerseText" onclick="KHALWA.openVerseTafsir()" style="cursor:pointer"></div>
+      <div class="verse-ref" id="homeVerseRef" onclick="KHALWA.openVerseTafsir()" style="cursor:pointer"></div>
+      <div style="font-size:11px;opacity:.7;margin-top:8px">اضغط على الآية لعرض التفسير</div>
+    </div>
+
+    <!-- Prayer Times -->
+    <div class="prayer-hero">
+      <div class="prayer-next-label">الصلاة القادمة</div>
+      <div class="prayer-next-name" id="nextPName">جاري التحميل...</div>
+      <div class="prayer-next-time" id="nextPTime"></div>
+      <div class="prayer-countdown" id="nextPCountdown" aria-live="polite">—</div>
+      <div style="font-size:11px;opacity:.7;margin-top:4px" id="prayerCity"></div>
+      <div class="prayer-grid" id="prayerGrid"></div>
+      <div class="prayer-actions-row">
+        <button onclick="openPrayerSettings()" class="prayer-action-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>طريقة الحساب</span>
+        </button>
+        <button onclick="openReminderSettings()" class="prayer-action-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span>إعدادات التذكير</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hadith of the Day -->
+    <div class="card hadith-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+        <div class="hadith-badge" style="margin-bottom:0">📜 حديث اليوم</div>
+        <button onclick="KHALWA.shuffleHadithOfDay()" style="background:var(--c-accent-bg);border:1px solid var(--c-accent);color:var(--c-a700);padding:5px 12px;border-radius:var(--rfull);font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px">🔄 حديث آخر</button>
+      </div>
+      <div class="hadith-text" id="hadithText" onclick="KHALWA.openHadithExpl()" style="cursor:pointer"></div>
+      <div class="hadith-isnad" id="hadithIsnad"></div>
+      <div class="hadith-src" id="hadithSrc"></div>
+      <div class="hadith-benefit" id="hadithBenefit" style="margin-top:10px"></div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="KHALWA.openHadithExpl()">
+        عرض الشرح الكامل ←
+      </button>
+    </div>
+
+    <!-- Mood Check -->
+    <div class="card mood-card-pro">
+      <div class="mood-header">
+        <div style="font-size:22px">💚</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:var(--tx1)">كيف حالك اليوم؟</div>
+          <div style="font-size:12px;color:var(--tx3)">اختر شعورك لنرسل لك ما يلائم قلبك</div>
+        </div>
+      </div>
+      <div class="mood-grid-pro">
+        <button class="mood-opt-pro" data-mood="grateful" onclick="selectMood('grateful')">
+          <span class="mood-em-pro">😊</span>
+          <span class="mood-lbl-pro">ممتنن</span>
+        </button>
+        <button class="mood-opt-pro" data-mood="peaceful" onclick="selectMood('peaceful')">
+          <span class="mood-em-pro">😌</span>
+          <span class="mood-lbl-pro">مرتاح</span>
+        </button>
+        <button class="mood-opt-pro" data-mood="sad" onclick="selectMood('sad')">
+          <span class="mood-em-pro">😔</span>
+          <span class="mood-lbl-pro">حزين</span>
+        </button>
+        <button class="mood-opt-pro" data-mood="stressed" onclick="selectMood('stressed')">
+          <span class="mood-em-pro">😰</span>
+          <span class="mood-lbl-pro">قلق</span>
+        </button>
+      </div>
+      <div class="mood-resp-pro" id="moodResp" aria-live="polite"></div>
+    </div>
+
+    <div style="height:16px"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: QURAN
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-quran">
+    <div class="pg-head">
+      <div><h1 class="pg-title">القرآن الكريم</h1><p class="pg-sub">اقرأ وتدبّر كلام الله</p></div>
+      <div class="font-ctrl">
+        <button class="font-btn" onclick="changeFontSize(-2)" aria-label="تصغير">أ-</button>
+        <button class="font-btn" onclick="toggleTafsir()" aria-label="التفسير" title="تفسير">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8l6 6"/><path d="M4 14l6-6 2-3"/><path d="M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></svg>
+        </button>
+        <button class="font-btn" onclick="changeFontSize(2)" aria-label="تكبير">أ+</button>
+      </div>
+    </div>
+
+    <!-- Side-by-Side Surah + Reciter Picker (التصميم الاحترافي الجديد) -->
+    <div class="quran-picker-card">
+      <!-- العمود الأيمن: السورة -->
+      <button class="picker-half" onclick="openSurahList()" aria-label="اختر سورة">
+        <div class="picker-icon-wrap picker-icon-surah">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div class="picker-text">
+          <div class="picker-label">السورة</div>
+          <div class="picker-name" id="curSurahName">الفاتحة</div>
+          <div class="picker-meta" id="curSurahMeta">مكية • ٧ آيات</div>
+        </div>
+        <div class="surah-num-badge" id="curSurahNum">١</div>
+      </button>
+
+      <div class="picker-divider"></div>
+
+      <!-- العمود الأيسر: القارئ -->
+      <button class="picker-half" onclick="openReciterList()" aria-label="اختر القارئ">
+        <div class="picker-icon-wrap picker-icon-reciter">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+        <div class="picker-text">
+          <div class="picker-label">القارئ</div>
+          <div class="picker-name" id="curReciterName">المنشاوي</div>
+          <div class="picker-meta" id="curReciterMeta">اضغط للتغيير</div>
+        </div>
+        <svg class="picker-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+    </div>
+
+    <!-- شريط الإجراءات السريعة: استئناف، تشغيل كامل -->
+    <div class="quran-actions">
+      <button class="qa-btn" id="resumeBtn" onclick="resumeLastAyah()" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        <span>استئناف من حيث وقفت</span>
+      </button>
+      <button class="qa-btn qa-auto" id="autoScrollBtn" onclick="toggleAutoScroll()" aria-pressed="false">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        <span>السكرول التلقائي</span>
+      </button>
+    </div>
+
+    <!-- Basmala -->
+    <div class="basmala" id="basmala">بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ</div>
+
+    <!-- Verses -->
+    <div id="ayahsWrap"><div class="spinner"></div></div>
+
+    <!-- Audio Bar -->
+    <div class="audio-bar" id="audioBar">
+      <button class="audio-bar-play" id="playerBtn" onclick="playSurah()" aria-label="تشغيل">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="audioSurahName"></div>
+        <div style="font-size:11px;color:var(--tx2)" id="audioAyahNum">اضغط على آية للاستماع</div>
+      </div>
+      <button class="audio-bar-stop" id="stopBtn" onclick="stopAudio()" style="display:none" aria-label="إيقاف">
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: KHALWA + TASBEEH
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-khalwa">
+    <div class="pg-head">
+      <div><h1 class="pg-title">الخُلوة</h1><p class="pg-sub">وقت هادئ مع الله</p></div>
+    </div>
+
+    <!-- Type -->
+    <div class="kh-types">
+      <button class="kh-type on" data-kt="reading"  onclick="pickKType('reading')"><span class="kh-type-icon">📖</span><span class="kh-type-lbl">قراءة</span></button>
+      <button class="kh-type"    data-kt="dhikr"    onclick="pickKType('dhikr')"  ><span class="kh-type-icon">📿</span><span class="kh-type-lbl">ذكر</span></button>
+      <button class="kh-type"    data-kt="dua"      onclick="pickKType('dua')"    ><span class="kh-type-icon">🤲</span><span class="kh-type-lbl">دعاء</span></button>
+      <button class="kh-type"    data-kt="tafakkur" onclick="pickKType('tafakkur')"><span class="kh-type-icon">🌙</span><span class="kh-type-lbl">تفكر</span></button>
+    </div>
+
+    <!-- Guidance -->
+    <div id="khGuidance"></div>
+
+    <!-- Duration -->
+    <div class="dur-row">
+      <button class="dur-btn" data-dur="5"  onclick="pickKDur(5)">5 د</button>
+      <button class="dur-btn" data-dur="10" onclick="pickKDur(10)">10 د</button>
+      <button class="dur-btn on" data-dur="15" onclick="pickKDur(15)">15 د</button>
+      <button class="dur-btn" data-dur="20" onclick="pickKDur(20)">20 د</button>
+      <button class="dur-btn" data-dur="30" onclick="pickKDur(30)">30 د</button>
+      <button class="dur-btn" data-dur="60" onclick="pickKDur(60)">ساعة</button>
+    </div>
+
+    <!-- Timer -->
+    <div style="display:flex;flex-direction:column;align-items:center;padding:16px 0">
+      <div class="timer-ring-wrap">
+        <svg viewBox="0 0 200 200">
+          <circle class="ring-bg" cx="100" cy="100" r="90"/>
+          <circle class="ring-fill" cx="100" cy="100" r="90" id="khRing"
+            stroke-dasharray="565" stroke-dashoffset="565"
+            transform="rotate(-90 100 100)" stroke-linecap="round"/>
+        </svg>
+        <div class="ring-inner paused" id="ringInner">
+          <div class="timer-num" id="timerNum">15:00</div>
+          <div class="timer-lbl" id="timerStatus">اضغط للبدء</div>
+        </div>
+      </div>
+
+      <button class="kh-start" id="khBtn" onclick="toggleKhalwa()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        ابدأ الخلوة
+      </button>
+    </div>
+
+    <!-- Extras -->
+    <div class="kh-extras">
+      <button class="kh-extra" onclick="navTo('quran')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        افتح القرآن
+      </button>
+      <button class="kh-extra" onclick="navTo('adhkar')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        الأذكار
+      </button>
+      <button class="kh-extra" onclick="openSheet('<div style=\'display:flex;flex-direction:column;gap:14px\'><div style=\'display:flex;gap:10px\'><span style=\'font-size:22px\'>📵</span><div><div style=\'font-weight:700;font-size:14px\'>أغلق الإشعارات</div><div style=\'color:var(--tx2);font-size:12px\'>أوقف المقاطعات لمدة خلوتك</div></div></div><div style=\'display:flex;gap:10px\'><span style=\'font-size:22px\'>🌬️</span><div><div style=\'font-weight:700;font-size:14px\'>تنفّس ببطء</div><div style=\'color:var(--tx2);font-size:12px\'>3 ثوانٍ شهيق، 4 توقف، 5 زفير</div></div></div><div style=\'display:flex;gap:10px\'><span style=\'font-size:22px\'>🤲</span><div><div style=\'font-weight:700;font-size:14px\'>حضّر قلبك</div><div style=\'color:var(--tx2);font-size:12px\'>ابدأ بالاستعاذة والفاتحة</div></div></div><div style=\'display:flex;gap:10px\'><span style=\'font-size:22px\'>🌙</span><div><div style=\'font-weight:700;font-size:14px\'>أفضل الأوقات</div><div style=\'color:var(--tx2);font-size:12px\'>بعد الفجر وبعد العشاء</div></div></div></div>','نصائح الخلوة')">
+        💡 نصائح
+      </button>
+    </div>
+
+    <!-- Tasbeeh -->
+    <div class="card tasbeeh-card-pro" style="margin-top:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:22px">📿</span>
+          <div>
+            <div style="font-size:16px;font-weight:700">المسبحة الرقمية</div>
+            <div class="tasbeeh-cycle-num" id="tasbeehCycleInfo" style="font-size:11px;color:var(--tx3)">الذكر ١ من ٨</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sec btn-sm" onclick="resetTasbeeh()">صفر</button>
+          <button class="btn btn-sec btn-sm" onclick="nextTasbeeh()">التالية ›</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <button class="tasbeeh-outer" onclick="tapTasbeeh()" aria-label="اضغط للتسبيح">
+          <svg class="tasbeeh-svg" viewBox="0 0 120 120">
+            <circle class="t-ring-bg" cx="60" cy="60" r="54"/>
+            <circle id="tRing" cx="60" cy="60" r="54"
+              stroke-dasharray="339" stroke-dashoffset="339"
+              transform="rotate(-90 60 60)"/>
+          </svg>
+          <div class="tasbeeh-inner">
+            <div class="tasbeeh-count" id="tasbeehCount">٠</div>
+            <div class="tasbeeh-target" id="tasbeehTarget">/ ٣٣</div>
+          </div>
+        </button>
+        <div class="tasbeeh-ar" id="tasbeehAr">سُبْحَانَ اللهِ</div>
+        <div class="tasbeeh-virtue" id="tasbeehVirtue" style="display:none"></div>
+        <div style="font-size:11px;color:var(--tx3)">اضغط الدائرة للتسبيح</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: ADHKAR
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-adhkar">
+    <div class="pg-head"><div><h1 class="pg-title">الأذكار</h1><p class="pg-sub">أذكار الصباح والمساء وبعد الصلاة</p></div></div>
+
+    <div class="adhkar-groups">
+      <div>
+        <div class="adhkar-group-title">🌅 أذكار اليوم والليل</div>
+        <div class="adhkar-tabs">
+          <button class="adhkar-tab on" data-atab="morning"    onclick="switchAdhkarTab('morning')">🌅 الصباح</button>
+          <button class="adhkar-tab"    data-atab="evening"    onclick="switchAdhkarTab('evening')">🌇 المساء</button>
+          <button class="adhkar-tab"    data-atab="wake"       onclick="switchAdhkarTab('wake')">☀️ الاستيقاظ</button>
+          <button class="adhkar-tab"    data-atab="sleep"      onclick="switchAdhkarTab('sleep')">😴 النوم</button>
+          <button class="adhkar-tab"    data-atab="afterPrayer"onclick="switchAdhkarTab('afterPrayer')">🤲 الصلاة</button>
+        </div>
+      </div>
+      <div>
+        <div class="adhkar-group-title">🏠 أذكار الحياة اليومية</div>
+        <div class="adhkar-tabs">
+          <button class="adhkar-tab" data-atab="food"     onclick="switchAdhkarTab('food')">🍽️ الطعام</button>
+          <button class="adhkar-tab" data-atab="dressing" onclick="switchAdhkarTab('dressing')">👕 اللباس</button>
+          <button class="adhkar-tab" data-atab="bathroom" onclick="switchAdhkarTab('bathroom')">🚽 الخلاء</button>
+          <button class="adhkar-tab" data-atab="mosque"   onclick="switchAdhkarTab('mosque')">🕌 المسجد</button>
+          <button class="adhkar-tab" data-atab="travel"   onclick="switchAdhkarTab('travel')">🚗 السفر</button>
+        </div>
+      </div>
+      <div>
+        <div class="adhkar-group-title">🌧️ أذكار الطبيعة</div>
+        <div class="adhkar-tabs">
+          <button class="adhkar-tab" data-atab="rain" onclick="switchAdhkarTab('rain')">🌧️ المطر</button>
+          <button class="adhkar-tab" data-atab="wind" onclick="switchAdhkarTab('wind')">💨 الريح</button>
+        </div>
+      </div>
+      <div>
+        <div class="adhkar-group-title">🌿 عند الشدّة والمرض</div>
+        <div class="adhkar-tabs">
+          <button class="adhkar-tab" data-atab="illness"  onclick="switchAdhkarTab('illness')">🌿 المرض</button>
+          <button class="adhkar-tab" data-atab="anxiety"  onclick="switchAdhkarTab('anxiety')">😟 الهم</button>
+          <button class="adhkar-tab" data-atab="distress" onclick="switchAdhkarTab('distress')">🔥 الكرب</button>
+        </div>
+      </div>
+      <div>
+        <div class="adhkar-group-title">📿 عامّة</div>
+        <div class="adhkar-tabs">
+          <button class="adhkar-tab" data-atab="general" onclick="switchAdhkarTab('general')">📿 العام</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:12px">
+      <div class="progress-bar"><div class="progress-fill" id="adhkarPF" style="width:0%"></div></div>
+      <div style="font-size:11px;color:var(--tx2);margin-top:4px;text-align:left" id="adhkarPT">0 / 0</div>
+    </div>
+
+    <div id="adhkarList"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: LIBRARY
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-library">
+    <div class="pg-head"><div><h1 class="pg-title">المكتبة</h1><p class="pg-sub">علم ومعرفة إسلامية شاملة</p></div></div>
+
+    <div class="lib-group">
+      <div class="lib-group-title">📖 السيرة والأعلام</div>
+      <div class="lib-grid">
+        <button class="lib-tile" onclick="navTo('prophets')">
+          <div class="lib-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+          <div class="lib-tile-name">قصص الأنبياء</div>
+          <div class="lib-tile-count">٢٥ نبياً ورسولاً</div>
+        </button>
+        <button class="lib-tile" onclick="navTo('companions')">
+          <div class="lib-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="lib-tile-name">الصحابة والصحابيات</div>
+          <div class="lib-tile-count">٨٠+ صحابي وصحابية</div>
+        </button>
+        <button class="lib-tile" onclick="navTo('seerah')">
+          <div class="lib-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+          <div class="lib-tile-name">السيرة النبوية</div>
+          <div class="lib-tile-count">حياة النبي ﷺ كاملة مفصّلة</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="lib-group">
+      <div class="lib-group-title">🕋 العلم والعبادة</div>
+      <div class="lib-grid">
+        <button class="lib-tile" onclick="navTo('nawawi')">
+          <div class="lib-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/><line x1="9" y1="15" x2="13" y2="15"/></svg></div>
+          <div class="lib-tile-name">الأحاديث الأربعون النووية</div>
+          <div class="lib-tile-count">٤٢ حديثاً كاملاً بشرحها</div>
+        </button>
+
+        <button class="lib-tile" onclick="navTo('fiqh')">
+          <div class="lib-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+          <div class="lib-tile-name">الفقه الميسّر</div>
+          <div class="lib-tile-count">١١٩١ مسألة في ١١ باباً مع الأدلة</div>
+        </button>
+        <button class="lib-tile" onclick="navTo('asma')">
+          <div class="lib-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div class="lib-tile-name">أسماء الله الحسنى</div>
+          <div class="lib-tile-count">٩٩ اسماً مع الشرح</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="lib-group">
+      <div class="lib-group-title">🧭 أدواتك الخاصة</div>
+      <div class="lib-grid">
+        <button class="lib-tile" onclick="showBookmarks()">
+          <div class="lib-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+          <div class="lib-tile-name">الآيات المحفوظة</div>
+          <div class="lib-tile-count">آياتك المفضلة</div>
+        </button>
+
+        <!-- ═══ المحراب: المدخل الوحيد للنظام الروحاني (مخطط الختمة، شجرة الإحسان، دفتر الأدعية، الخلوة العميقة) ═══ -->
+        <button class="lib-tile lib-tile-new" onclick="navTo('ruhani')">
+          <div class="lib-tile-icon"><span style="font-size:24px">🕌</span></div>
+          <div class="lib-tile-name">المحراب</div>
+          <div class="lib-tile-count">طقس، سفر، روتين</div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: PROPHETS
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-prophets">
+    <div class="pg-head">
+      <div><h1 class="pg-title">قصص الأنبياء</h1><p class="pg-sub">عليهم السلام</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="navTo('library')">← رجوع</button>
+    </div>
+    <div id="prophetsWrap"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: COMPANIONS
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-companions">
+    <div class="pg-head">
+      <div><h1 class="pg-title">الصحابة والصحابيات</h1><p class="pg-sub">رضي الله عنهم</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="navTo('library')">← رجوع</button>
+    </div>
+    <div class="companions-tabs">
+      <button class="comp-tab on" data-ctab="male" onclick="switchCompanionTab('male')">⭐ الصحابة</button>
+      <button class="comp-tab"    data-ctab="female" onclick="switchCompanionTab('female')">🌸 الصحابيات</button>
+    </div>
+    <div id="companionsWrap"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: SEERAH
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-seerah">
+    <div class="pg-head">
+      <div><h1 class="pg-title">السيرة النبوية</h1><p class="pg-sub">صلى الله عليه وسلم</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="navTo('library')">← رجوع</button>
+    </div>
+    <div class="seerah-tabs">
+      <button class="seerah-tab on" data-stab="stages" onclick="switchSeerahTab('stages')">📍 مراحل السيرة</button>
+      <button class="seerah-tab"    data-stab="family" onclick="switchSeerahTab('family')">🏠 أهل بيته</button>
+    </div>
+    <div id="seerahWrap"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: QURAN RADIO (تم نقله للواجهة الرئيسية)
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-radio" style="display:none">
+    <div class="pg-head">
+      <div><h1 class="pg-title">إذاعة القرآن الكريم</h1><p class="pg-sub">بث مباشر لإذاعة القرآن الكريم المصرية</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="navTo('home')">← رجوع</button>
+    </div>
+    <div id="radioWrap"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: NAWAWI 42 HADITHS
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-nawawi">
+    <div class="pg-head">
+      <div><h1 class="pg-title">الأحاديث الأربعون النووية</h1><p class="pg-sub">٤٢ حديثاً جامعاً لأصول الإسلام بشرح الإمام النووي</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="navTo('library')">← رجوع</button>
+    </div>
+    <div id="nawawiWrap"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: FIQH
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-fiqh">
+    <div class="pg-head">
+      <div><h1 class="pg-title">الفقه الميسّر</h1><p class="pg-sub">مسائل فقهية يومية</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="navTo('library')">← رجوع</button>
+    </div>
+    <div id="fiqhWrap"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: 99 NAMES
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-asma">
+    <div class="pg-head">
+      <div><h1 class="pg-title">الأسماء الحسنى</h1><p class="pg-sub">وَلِلَّهِ الْأَسْمَاءُ الْحُسْنَىٰ فَادْعُوهُ بِهَا</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="navTo('library')">← رجوع</button>
+    </div>
+    <div class="asma-grid" id="asmaGrid"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: QIBLA
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-qibla">
+    <div class="pg-head"><div><h1 class="pg-title">اتجاه القبلة</h1><p class="pg-sub">نحو بيت الله الحرام</p></div></div>
+
+    <div style="display:flex;flex-direction:column;align-items:center;padding:12px 0">
+      <div class="qibla-compass-wrap">
+        <div class="qibla-compass-ring">
+          <div class="compass-dirs" aria-hidden="true">
+            <div class="compass-n">ش</div>
+            <div class="compass-s">ج</div>
+            <div class="compass-e">غ</div>
+            <div class="compass-w">ش.غ</div>
+          </div>
+          <div id="qiblaNeedle" style="width:4px;height:90px;margin-top:-90px;margin-right:-2px"></div>
+          <div class="qibla-kaaba-center">🕋</div>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div style="font-size:52px;margin:12px 0;transition:transform .2s" id="qiblaArrow">🔼</div>
+      <p id="qiblaStatus" style="font-size:13px;color:var(--tx2);margin-bottom:16px" aria-live="polite">اضغط لتحديد القبلة</p>
+
+      <!-- Stats -->
+      <div class="qibla-stats">
+        <div class="qibla-stat">
+          <div class="qibla-stat-val" id="qiblaDistVal">—</div>
+          <div class="qibla-stat-lbl">المسافة للكعبة</div>
+        </div>
+        <div class="qibla-stat">
+          <div class="qibla-stat-val" id="qiblaDegVal">—</div>
+          <div class="qibla-stat-lbl">درجة الاتجاه</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" style="margin-top:16px" onclick="initQibla()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        تحديد اتجاه القبلة
+      </button>
+
+      <div style="background:var(--c-primary-bg);border-radius:var(--r16);padding:12px 14px;margin-top:14px;font-size:12px;line-height:1.8;color:var(--tx2);width:100%">
+        💡 <strong style="color:var(--c-primary)">تلميح:</strong> أمسك الهاتف أفقياً وابتعد عن الأجهزة المعدنية للحصول على دقة أعلى. وجّه السهم نحو الدرجة المحددة من الشمال.
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: PROFILE
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-profile">
+    <h1 class="pg-title" style="margin-bottom:16px">ملفي الشخصي</h1>
+
+    <!-- Profile Hero -->
+    <div class="profile-hero">
+      <button class="profile-ava" onclick="editName()" aria-label="تعديل الاسم">😊</button>
+      <div class="profile-name" onclick="editName()" id="profileName">أخي الكريم</div>
+      <div class="profile-hijri" id="hijriDate"></div>
+      <div class="profile-stats">
+        <div class="pstat"><div class="pstat-v" id="profileStreak">٠</div><div class="pstat-l">يوم</div></div>
+        <div class="pstat"><div class="pstat-v" id="profileKh">٠</div><div class="pstat-l">خلوة</div></div>
+        <div class="pstat"><div class="pstat-v" id="profileDhikr">٠</div><div class="pstat-l">ذكر</div></div>
+      </div>
+    </div>
+
+    <!-- Achievements -->
+    <div style="font-size:16px;font-weight:700;margin-bottom:10px">🏆 الإنجازات</div>
+    <div class="ach-grid" id="achGrid"></div>
+
+    <!-- Settings -->
+    <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--tx3);margin-bottom:6px">الإعدادات</div>
+    <div class="settings-card" style="margin-bottom:14px">
+      <div class="setting-row" onclick="editName()">
+        <div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="setting-info"><div class="setting-label">الاسم</div><div class="setting-value" id="settingsName">—</div></div>
+        <div class="setting-arrow">‹</div>
+      </div>
+      <div class="setting-row" onclick="openPrayerSettings()">
+        <div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l3 3"/></svg></div>
+        <div class="setting-info"><div class="setting-label">طريقة حساب الصلاة</div><div class="setting-value">اضغط للتغيير</div></div>
+        <div class="setting-arrow">‹</div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+        <div class="setting-info"><div class="setting-label">الوضع الليلي</div><div class="setting-value" id="darkValue">مُعطّل</div></div>
+        <div class="toggle-sw" id="toggleDark" onclick="toggleTheme()" role="switch" aria-label="الوضع الليلي"></div>
+      </div>
+      <div class="setting-row" onclick="toggleTafsir();navTo('quran')">
+        <div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8l6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></svg></div>
+        <div class="setting-info"><div class="setting-label">تفسير الآيات</div><div class="setting-value">عرض التفسير الميسّر</div></div>
+        <div class="setting-arrow">‹</div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--tx3);margin-bottom:6px">عن التطبيق</div>
+    <div class="settings-card" style="margin-bottom:14px">
+      <div class="setting-row" onclick="shareApp()">
+        <div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+        <div class="setting-info"><div class="setting-label">شارك التطبيق</div><div class="setting-value">أرسل لصديق</div></div>
+        <div class="setting-arrow">‹</div>
+      </div>
+      <div class="setting-row" onclick="showAbout()">
+        <div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+        <div class="setting-info"><div class="setting-label">عن خُلوة</div><div class="setting-value">الإصدار 1.0</div></div>
+        <div class="setting-arrow">‹</div>
+      </div>
+      <div class="setting-row" onclick="resetData()">
+        <div class="setting-icon" style="background:var(--err-bg);color:var(--err)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></div>
+        <div class="setting-info"><div class="setting-label" style="color:var(--err)">حذف البيانات</div><div class="setting-value">إعادة ضبط المصنع</div></div>
+        <div class="setting-arrow">‹</div>
+      </div>
+    </div>
+
+    <div style="height:20px"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: RUHANI HUB — مركز الأعمال الروحانية
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-ruhani">
+    <div class="pg-head">
+      <div><h1 class="pg-title">المحراب</h1><p class="pg-sub">محرابك الروحاني الخاص</p></div>
+    </div>
+
+    <!-- تذكيرات سياقية -->
+    <div class="ruhani-section">
+      <h3 class="ruhani-section-h">🧠 التذكير السياقي الذكي</h3>
+      <div id="contextFeedWrap"></div>
+      <div id="contextSettingsWrap"></div>
+    </div>
+
+    <!-- بطاقات الميزات -->
+    <div class="sec-label">أدواتك الروحانية</div>
+    <div class="ruhani-grid">
+      <button class="ruhani-tile" onclick="navTo('khatmah')">
+        <div class="ruhani-tile-icon" style="background:var(--c-primary-bg);color:var(--c-primary)">🌳</div>
+        <div class="ruhani-tile-name">مخطط الختمة</div>
+        <div class="ruhani-tile-desc">ختمة ذكية بشجرة نامية</div>
+      </button>
+      <button class="ruhani-tile" onclick="navTo('dua')">
+        <div class="ruhani-tile-icon" style="background:rgba(46,118,166,.12);color:var(--info)">🤲</div>
+        <div class="ruhani-tile-name">دفتر الأدعية</div>
+        <div class="ruhani-tile-desc">مساحتك السرية مع الله</div>
+      </button>
+      <button class="ruhani-tile" onclick="navTo('focus')">
+        <div class="ruhani-tile-icon" style="background:var(--ok-bg);color:var(--ok)">🎯</div>
+        <div class="ruhani-tile-name">الخلوة العميقة</div>
+        <div class="ruhani-tile-desc">بومودورو + أصوات بيئية</div>
+      </button>
+      <button class="ruhani-tile ruhani-tile-new" onclick="navTo('bustan')">
+        <div class="ruhani-tile-icon" style="background:linear-gradient(135deg,#DEF7E9,#FBEACB);color:var(--c-p700)">🌴</div>
+        <div class="ruhani-tile-name">بستان الأعمال</div>
+        <div class="ruhani-tile-desc">حديقةٌ تنمو بأعمالك</div>
+      </button>
+      <button class="ruhani-tile ruhani-tile-new" onclick="navTo('tawbah')">
+        <div class="ruhani-tile-icon" style="background:linear-gradient(135deg,#FCE4C8,#F8D4B0);color:var(--c-a700)">🤲</div>
+        <div class="ruhani-tile-name">مذكرات التوبة</div>
+        <div class="ruhani-tile-desc">سرٌّ بينك وبين الله</div>
+      </button>
+      <button class="ruhani-tile" onclick="navTo('library')">
+        <div class="ruhani-tile-icon" style="background:var(--c-primary-bg);color:var(--c-primary)">📚</div>
+        <div class="ruhani-tile-name">المكتبة</div>
+        <div class="ruhani-tile-desc">قرآن، سيرة، فقه، أحاديث</div>
+      </button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: KHATMAH PLANNER
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-khatmah">
+    <div class="pg-head">
+      <div><h1 class="pg-title">مخطط الختمة</h1><p class="pg-sub">ختمة ذكية بشجرة نامية</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="navTo('ruhani')">← رجوع</button>
+    </div>
+    <div id="khatmahWrap"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: DUA JOURNAL
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-dua">
+    <div class="pg-head">
+      <div><h1 class="pg-title">دفتر الأدعية</h1><p class="pg-sub">مساحتك السرية مع الله</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="navTo('ruhani')">← رجوع</button>
+    </div>
+    <div id="duaWrap"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: FOCUS MODE
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-focus">
+    <div class="pg-head">
+      <div><h1 class="pg-title">الخلوة العميقة</h1><p class="pg-sub">تركيز بلا مقاطعات</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="navTo('ruhani')">← رجوع</button>
+    </div>
+    <div id="focusWrap"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: BUSTAN (بستان الأعمال)
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-bustan">
+    <div class="pg-head">
+      <div><h1 class="pg-title">بستان الأعمال</h1><p class="pg-sub">حديقةٌ تنمو بكل عملٍ صالح</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="navTo('ruhani')">← رجوع</button>
+    </div>
+    <div id="bustanWrap"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: TAWBAH (مذكرات التوبة)
+  ══════════════════════════════════════════ -->
+  <section class="page" id="pg-tawbah">
+    <div class="pg-head">
+      <div><h1 class="pg-title">مذكرات التوبة</h1><p class="pg-sub">سرٌّ بينك وبين الله</p></div>
+      <button class="btn btn-ghost btn-sm" onclick="navTo('ruhani')">← رجوع</button>
+    </div>
+    <div id="tawbahWrap"></div>
+  </section>
+
+<!-- ══════════════════════════════════════════
+     BOTTOM NAVIGATION
+══════════════════════════════════════════ -->
+<nav class="bnav" role="navigation" aria-label="التنقل الرئيسي">
+  <button class="nav-i on" data-pg="home"    onclick="navTo('home')"   aria-label="الرئيسية">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>الرئيسية</span>
+  </button>
+  <button class="nav-i" data-pg="quran"   onclick="navTo('quran')"  aria-label="القرآن">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    <span>القرآن</span>
+  </button>
+  <button class="nav-i nav-center" data-pg="khalwa" onclick="navTo('khalwa')" aria-label="الخلوة">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    <span>خلوة</span>
+  </button>
+  <button class="nav-i" data-pg="adhkar"  onclick="navTo('adhkar')" aria-label="الأذكار">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    <span>أذكار</span>
+  </button>
+  <button class="nav-i" data-pg="ruhani" onclick="navTo('ruhani')" aria-label="المحراب">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- قوس المحراب المركب -->
+      <path d="M12 2 C 9 4, 7 7, 7 11 V 21 H 17 V 11 C 17 7, 15 4, 12 2 Z"/>
+      <!-- الخط الداخلي للمحراب -->
+      <path d="M12 5 C 10.5 6.5, 9.5 8.5, 9.5 11 V 19 H 14.5 V 11 C 14.5 8.5, 13.5 6.5, 12 5 Z" stroke-width="1.3" opacity="0.55"/>
+      <!-- نقطة القبلة في الأعلى -->
+      <circle cx="12" cy="8" r="0.6" fill="currentColor"/>
+    </svg>
+    <span>محراب</span>
+  </button>
+</nav>
+
+</div><!-- /app -->
+
+<!-- Toast Container -->
+<div id="toastWrap" role="alert" aria-live="polite" aria-atomic="true"></div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/verse-day.js"></script>
+<script src="js/hadith-day.js"></script>
+<script src="js/prophets-stories.js"></script>
+<script src="js/companions.js"></script>
+<script src="js/female-companions.js"></script>
+<script src="js/seerah-family.js"></script>
+<script src="js/seerah-full.js"></script>
+<script src="js/ahl-al-bayt.js"></script>
+<script src="js/nawawi-forty.js"></script>
+<script src="js/fiqh.js"></script>
+<script src="js/adhkar.js"></script>
+<script src="js/api.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/quran-radio.js"></script>
+<!-- ═══ وحدات النظام الروحاني الجديد ═══ -->
+<script src="js/khatmah.js"></script>
+<script src="js/dua-journal.js"></script>
+<script src="js/focus-mode.js"></script>
+<script src="js/bustan.js"></script>
+<script src="js/tawbah.js"></script>
+<script src="js/context-reminders.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

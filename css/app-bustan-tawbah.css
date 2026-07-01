@@ -1,0 +1,924 @@
+/* ============================================================
+   KHALWA — BUSTAN + TAWBAH + UX REFINEMENTS
+   بستان الأعمال + مذكرات التوبة + تحسينات UX
+   ============================================================ */
+
+/* ════════════════════════════════════════════════════════════
+   تحسينات UX عامة — تقليل الازدحام
+   ════════════════════════════════════════════════════════════ */
+
+/* مسافات أكبر بين البطاقات */
+.ihsan-section { margin-bottom: 24px !important; }
+.dua-journal { gap: 18px !important; }
+.dua-list { gap: 14px !important; }
+
+/* شبكات أكثر تنفّساً */
+.ihsan-deeds-grid { gap: 12px !important; }
+.ihsan-manual-grid { gap: 12px !important; }
+.dua-cat-grid { gap: 10px !important; }
+.dua-state-tabs { gap: 8px !important; }
+
+/* بطاقات أكثر اتساعاً داخلياً */
+.ihsan-deed-card { padding: 14px 10px !important; }
+.dua-cat-btn { padding: 12px 10px !important; }
+.dua-state-tab { padding: 12px 6px !important; }
+
+/* أحجام خطوط أكبر قليلاً للقراءة */
+.ihsan-deed-name { font-size: 13px !important; }
+.ihsan-deed-pts { font-size: 11px !important; }
+.dua-tab { font-size: 13px !important; }
+
+/* تنبيهات أقل إزعاجاً — padding أكبر */
+.ihsan-wither-notice { padding: 14px !important; line-height: 1.8 !important; }
+
+/* ════════════════════════════════════════════════════════════
+   شجرة الإحسان — تحديثات للـ viewBox الجديد
+   ════════════════════════════════════════════════════════════ */
+.ihsan-tree-svg {
+  max-width: 380px !important;
+  border-radius: var(--r20);
+}
+.ihsan-hero-tree {
+  padding: 12px !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   بستان الأعمال — الأنماط
+   ════════════════════════════════════════════════════════════ */
+
+.bustan-hero-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r24);
+  padding: 20px;
+  box-shadow: var(--sh2);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bustan-hero-card::before {
+  content: '';
+  position: absolute;
+  top: -40px; left: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(30,151,99,0.08), transparent 70%);
+  pointer-events: none;
+}
+
+.bustan-hero-card.state-dormant::before {
+  background: radial-gradient(circle, rgba(160,64,48,0.10), transparent 70%);
+}
+.bustan-hero-card.state-renewed::before {
+  background: radial-gradient(circle, rgba(199,144,46,0.12), transparent 70%);
+}
+.bustan-hero-card.state-wilting::before {
+  background: radial-gradient(circle, rgba(194,136,15,0.10), transparent 70%);
+}
+
+.bustan-hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.bustan-state-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--rfull);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.bustan-total-pts {
+  text-align: left;
+}
+.bustan-total-num {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--c-primary);
+  line-height: 1;
+  font-family: var(--f-display);
+}
+.bustan-total-lbl {
+  font-size: 11px;
+  color: var(--tx2);
+  margin-top: 4px;
+}
+
+.bustan-state-desc {
+  font-size: 14px;
+  color: var(--tx2);
+  line-height: 1.8;
+  margin-bottom: 18px;
+}
+
+.bustan-alert {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn);
+  border-radius: var(--r16);
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--tx1);
+  line-height: 1.9;
+  margin-bottom: 18px;
+}
+
+.bustan-renewed-msg {
+  background: linear-gradient(135deg, var(--ok-bg), #fff);
+  border: 1px solid var(--ok);
+  border-radius: var(--r16);
+  padding: 14px 16px;
+  font-family: var(--f-q);
+  font-size: 15px;
+  color: var(--c-primary);
+  text-align: center;
+  margin-bottom: 18px;
+  line-height: 1.9;
+}
+
+/* شبكة النباتات الأربعة */
+.bustan-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+@media (min-width: 600px) {
+  .bustan-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.bustan-plant-card {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r16);
+  padding: 14px 10px;
+  text-align: center;
+  transition: all .25s var(--ease-out);
+  position: relative;
+}
+.bustan-plant-card.on {
+  background: var(--c-primary-bg);
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px rgba(30,151,99,0.10);
+}
+.bustan-plant-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sh2);
+}
+
+.bustan-plant-svg-wrap {
+  height: 110px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.bustan-plant-svg {
+  width: 100%;
+  max-width: 100px;
+  height: 100%;
+  display: block;
+}
+
+.bustan-plant-name {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--tx1);
+  margin-bottom: 4px;
+}
+.bustan-plant-stage {
+  font-size: 11px;
+  color: var(--c-primary);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.bustan-plant-count {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--c-a700);
+  font-family: var(--f-display);
+  margin-bottom: 4px;
+}
+.bustan-plant-streak {
+  font-size: 10px;
+  color: var(--warn);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.bustan-plant-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  margin-top: 8px;
+}
+.bustan-add-btn {
+  font-size: 12px !important;
+  padding: 6px 14px !important;
+  width: 100%;
+}
+.bustan-today-tag {
+  font-size: 10px;
+  background: var(--ok);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: var(--rfull);
+  font-weight: 700;
+}
+
+.bustan-verse {
+  font-family: var(--f-q);
+  font-size: 14px;
+  color: var(--c-a700);
+  text-align: center;
+  padding: 14px;
+  background: var(--c-accent-bg);
+  border-radius: var(--r16);
+  line-height: 2;
+  margin-top: 8px;
+}
+
+/* بطاقة الإحصائيات */
+.bustan-stats-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r20);
+  padding: 18px 14px;
+  box-shadow: var(--sh1);
+  margin-bottom: 20px;
+}
+.bustan-stat-item { text-align: center; flex: 1; }
+.bustan-stat-num {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--c-primary);
+  font-family: var(--f-display);
+  line-height: 1;
+}
+.bustan-stat-lbl {
+  font-size: 11px;
+  color: var(--tx2);
+  margin-top: 4px;
+}
+.bustan-stat-sep {
+  width: 1px;
+  height: 30px;
+  background: var(--border);
+}
+
+/* بطاقات المعلومات التعليمية */
+.bustan-section { margin-bottom: 22px; }
+.bustan-section-h {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--tx1);
+  margin-bottom: 12px;
+}
+.bustan-info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 700px) {
+  .bustan-info-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.bustan-info-card {
+  display: flex;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--plant-color, var(--c-primary));
+  border-radius: var(--r16);
+  padding: 14px;
+  transition: all .2s;
+}
+.bustan-info-card:hover { box-shadow: var(--sh2); }
+
+.bustan-info-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--plant-accent, var(--c-accent-bg));
+  color: #fff;
+  border-radius: var(--r12);
+}
+.bustan-info-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--tx1);
+  margin-bottom: 4px;
+}
+.bustan-info-desc {
+  font-size: 12px;
+  color: var(--tx2);
+  line-height: 1.8;
+  margin-bottom: 6px;
+}
+.bustan-info-verse {
+  font-family: var(--f-q);
+  font-size: 12px;
+  color: var(--c-a700);
+  line-height: 1.9;
+}
+
+.bustan-reminder-card {
+  display: flex;
+  gap: 14px;
+  background: linear-gradient(135deg, var(--c-p900), var(--c-p700));
+  color: #fff;
+  border-radius: var(--r20);
+  padding: 18px;
+  margin-top: 8px;
+  box-shadow: var(--sh-color);
+}
+.bustan-reminder-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+.bustan-reminder-title {
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.bustan-reminder-text {
+  font-size: 13px;
+  opacity: 0.9;
+  line-height: 1.9;
+}
+
+/* ════════════════════════════════════════════════════════════
+   بطاقة بستان mini في الرئيسية
+   ════════════════════════════════════════════════════════════ */
+.bustan-home-card {
+  background: linear-gradient(135deg, #DEF7E9, #F4FCF7);
+  border: 1px solid var(--c-p100);
+  border-radius: var(--r16);
+  padding: 12px;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+.bustan-home-card.state-dormant {
+  background: linear-gradient(135deg, #FBF1DA, #FFF8E8);
+  border-color: var(--warn);
+}
+.bustan-home-card.state-renewed {
+  background: linear-gradient(135deg, #E6F6EC, #DEF7E9);
+  border-color: var(--ok);
+}
+.bustan-home-card:hover { transform: translateY(-2px); box-shadow: var(--sh2); }
+
+.bustan-home-svg {
+  height: 80px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.bustan-home-svg .bustan-plant-svg { max-width: 80px; }
+.bustan-home-body { text-align: center; }
+.bustan-home-state {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c-primary);
+  margin-bottom: 4px;
+}
+.bustan-home-count {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--tx1);
+  font-family: var(--f-display);
+}
+.bustan-home-cta {
+  font-size: 10px;
+  color: var(--tx3);
+  margin-top: 4px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   مذكرات التوبة — الأنماط
+   ════════════════════════════════════════════════════════════ */
+
+#pg-tawbah .page,
+#pg-tawbah {
+  background: var(--bg);
+}
+
+.tawbah-intro-card {
+  display: flex;
+  gap: 16px;
+  background: linear-gradient(135deg, var(--c-p900), var(--c-p700));
+  color: #fff;
+  border-radius: var(--r20);
+  padding: 20px;
+  box-shadow: var(--sh-color);
+  margin-bottom: 18px;
+}
+.tawbah-intro-emoji {
+  font-size: 42px;
+  flex-shrink: 0;
+}
+.tawbah-intro-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.tawbah-intro-desc {
+  font-size: 12px;
+  line-height: 1.9;
+  opacity: 0.92;
+  margin-bottom: 10px;
+}
+.tawbah-intro-verse {
+  font-family: var(--f-q);
+  font-size: 14px;
+  opacity: 0.9;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding-top: 10px;
+}
+
+.tawbah-burn-notice {
+  background: linear-gradient(135deg, var(--ok-bg), #fff);
+  border: 1px solid var(--ok);
+  border-radius: var(--r16);
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--c-primary);
+  line-height: 1.9;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.tawbah-night-card {
+  display: flex;
+  gap: 14px;
+  background: linear-gradient(135deg, #1A2840, #2C3E5C);
+  color: #fff;
+  border-radius: var(--r16);
+  padding: 16px;
+  margin-bottom: 18px;
+  align-items: center;
+}
+.tawbah-night-icon { font-size: 32px; flex-shrink: 0; }
+.tawbah-night-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+.tawbah-night-text { font-size: 12px; opacity: 0.9; line-height: 1.8; }
+
+.tawbah-stats-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r16);
+  padding: 16px 12px;
+  margin-bottom: 18px;
+  box-shadow: var(--sh1);
+}
+.tawbah-stat-item { text-align: center; flex: 1; }
+.tawbah-stat-num {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--c-primary);
+  font-family: var(--f-display);
+  line-height: 1;
+}
+.tawbah-stat-lbl { font-size: 11px; color: var(--tx2); margin-top: 4px; }
+.tawbah-stat-sep { width: 1px; height: 28px; background: var(--border); }
+
+.tawbah-quick-row { display: flex; gap: 10px; margin-bottom: 18px; }
+.tawbah-add-btn { flex: 1; padding: 14px !important; font-size: 15px !important; }
+
+.tawbah-state-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+@media (max-width: 480px) {
+  .tawbah-state-tabs { grid-template-columns: repeat(2, 1fr); }
+}
+.tawbah-state-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 6px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r12);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all .2s;
+  font-family: inherit;
+}
+.tawbah-state-tab.on {
+  border-color: var(--state-color, var(--c-primary));
+  background: var(--state-color, var(--c-primary));
+  color: #fff;
+}
+.tawbah-state-tab.on .tawbah-tab-cnt { background: rgba(255,255,255,0.2); color: #fff; }
+.tawbah-tab-icon { font-size: 22px; }
+.tawbah-tab-name { font-size: 11px; font-weight: 700; }
+.tawbah-tab-cnt {
+  font-size: 10px;
+  background: var(--surface2);
+  padding: 1px 8px;
+  border-radius: var(--rfull);
+  color: var(--tx2);
+  font-weight: 700;
+}
+
+.tawbah-list { display: flex; flex-direction: column; gap: 14px; }
+
+.tawbah-entry {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r20);
+  padding: 18px;
+  transition: all .2s;
+}
+.tawbah-entry.state-relapsed {
+  border-color: var(--err);
+  background: linear-gradient(135deg, var(--err-bg), #fff);
+}
+.tawbah-entry.state-steadfast,
+.tawbah-entry.state-healed {
+  border-color: var(--ok);
+  background: linear-gradient(135deg, var(--ok-bg), #fff);
+}
+.tawbah-entry.state-repented {
+  border-left: 4px solid var(--c-primary);
+}
+
+.tawbah-entry-hd {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tawbah-entry-cat {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--rfull);
+}
+.tawbah-entry-state {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--rfull);
+}
+
+.tawbah-entry-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--tx1);
+  margin-bottom: 8px;
+}
+.tawbah-entry-text {
+  font-family: var(--f-q);
+  font-size: 14px;
+  line-height: 2;
+  color: var(--tx1);
+  margin-bottom: 10px;
+  padding: 12px;
+  background: var(--surface2);
+  border-radius: var(--r12);
+}
+
+.tawbah-entry-meta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--tx3);
+  margin-bottom: 12px;
+}
+
+.tawbah-entry-guidance {
+  background: var(--c-primary-bg);
+  border-radius: var(--r12);
+  padding: 14px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tawbah-guidance-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.tawbah-guidance-lbl {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--c-primary);
+  flex-shrink: 0;
+  min-width: 70px;
+  padding-top: 2px;
+}
+.tawbah-guidance-val {
+  font-size: 13px;
+  color: var(--tx1);
+  line-height: 1.85;
+  flex: 1;
+}
+.tawbah-guidance-val.tawbah-verse {
+  font-family: var(--f-q);
+  color: var(--c-a700);
+  font-size: 14px;
+}
+
+.tawbah-burn-progress {
+  margin-bottom: 12px;
+}
+.tawbah-burn-lbl {
+  font-size: 11px;
+  color: var(--c-a700);
+  font-weight: 700;
+  margin-bottom: 6px;
+  line-height: 1.7;
+}
+.tawbah-burn-bar {
+  height: 6px;
+  background: var(--surface3);
+  border-radius: var(--rfull);
+  overflow: hidden;
+}
+.tawbah-burn-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-a300), var(--c-a500));
+  border-radius: var(--rfull);
+  transition: width .5s;
+}
+
+.tawbah-entry-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.tawbah-act-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: var(--r8);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tx1);
+  cursor: pointer;
+  transition: all .2s;
+  font-family: inherit;
+}
+.tawbah-act-btn:hover { background: var(--c-primary-bg); border-color: var(--c-primary); }
+.tawbah-act-relapse {
+  background: var(--err-bg);
+  color: var(--err);
+  border-color: var(--err);
+}
+.tawbah-act-relapse:hover { background: var(--err); color: #fff; }
+.tawbah-act-danger {
+  background: var(--surface2);
+  color: var(--err);
+}
+.tawbah-act-danger:hover { background: var(--err); color: #fff; border-color: var(--err); }
+
+.tawbah-history {
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+.tawbah-history summary {
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--tx2);
+  padding: 6px 0;
+}
+.tawbah-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+.tawbah-history-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--tx2);
+  flex-wrap: wrap;
+}
+.tawbah-history-icon { font-size: 14px; }
+.tawbah-history-state { font-weight: 700; color: var(--tx1); }
+.tawbah-history-date { color: var(--tx3); }
+.tawbah-history-note { color: var(--tx2); font-style: italic; }
+
+.tawbah-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--tx3);
+}
+.tawbah-empty-icon { font-size: 48px; margin-bottom: 12px; }
+.tawbah-empty-text { font-size: 14px; line-height: 1.9; }
+
+.tawbah-reminder-card {
+  display: flex;
+  gap: 14px;
+  background: linear-gradient(135deg, var(--c-a100), #fff);
+  border: 1px solid var(--c-a300);
+  border-radius: var(--r20);
+  padding: 18px;
+  margin-top: 18px;
+  align-items: center;
+}
+.tawbah-reminder-icon { font-size: 32px; flex-shrink: 0; }
+.tawbah-reminder-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--c-a700);
+  margin-bottom: 6px;
+}
+.tawbah-reminder-text {
+  font-size: 13px;
+  color: var(--tx1);
+  line-height: 1.9;
+}
+
+/* نموذج الإضافة */
+.tawbah-form-lbl {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tx1);
+  margin: 16px 0 10px;
+}
+.tawbah-form-input, .tawbah-form-textarea {
+  width: 100%;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r12);
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--tx1);
+  font-family: inherit;
+  transition: border-color .2s;
+}
+.tawbah-form-input:focus, .tawbah-form-textarea:focus {
+  outline: none;
+  border-color: var(--c-primary);
+}
+.tawbah-form-textarea {
+  font-family: var(--f-q);
+  line-height: 1.9;
+  resize: vertical;
+  min-height: 100px;
+}
+.tawbah-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+}
+.tawbah-cat-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 6px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r12);
+  background: var(--surface2);
+  cursor: pointer;
+  transition: all .2s;
+  font-family: inherit;
+}
+.tawbah-cat-btn.on {
+  border-color: var(--c-primary);
+  background: var(--c-primary-bg);
+  box-shadow: 0 0 0 3px rgba(30,151,99,0.10);
+}
+.tawbah-cat-icon { font-size: 22px; }
+.tawbah-cat-name { font-size: 11px; font-weight: 700; color: var(--tx1); text-align: center; }
+
+/* ════════════════════════════════════════════════════════════
+   بطاقة توبة mini في الرئيسية
+   ════════════════════════════════════════════════════════════ */
+.tawbah-home-card {
+  background: linear-gradient(135deg, #FCE4C8, #FBEACB);
+  border: 1px solid var(--c-a300);
+  border-radius: var(--r16);
+  padding: 12px;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tawbah-home-card:hover { transform: translateY(-2px); box-shadow: var(--sh2); }
+.tawbah-home-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: var(--r12);
+}
+.tawbah-home-body { flex: 1; min-width: 0; }
+.tawbah-home-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--c-a700);
+  margin-bottom: 2px;
+}
+.tawbah-home-sub {
+  font-size: 10px;
+  color: var(--tx2);
+}
+.tawbah-home-stats {
+  display: flex;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--c-p700);
+  margin-bottom: 4px;
+}
+.tawbah-home-night {
+  font-size: 10px;
+  color: var(--tx3);
+}
+
+/* ════════════════════════════════════════════════════════════
+   شارة "جديد" على tiles جديدة
+   ════════════════════════════════════════════════════════════ */
+.ruhani-tile-new {
+  position: relative;
+}
+.ruhani-tile-new::after {
+  content: 'جديد';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: var(--c-a500);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--rfull);
+  box-shadow: 0 2px 6px rgba(199,144,46,0.4);
+}
+
+/* ════════════════════════════════════════════════════════════
+   أنيميشن لطيفة
+   ════════════════════════════════════════════════════════════ */
+@keyframes bustanGrow {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.bustan-plant-card { animation: bustanGrow .5s var(--ease-out) both; }
+
+@keyframes tawbahFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.tawbah-entry { animation: tawbahFadeIn .4s var(--ease-out) both; }
+
+@keyframes fireflyFloat {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(-8px); opacity: 1; }
+}
+
+/* تحسين الصف على الرئيسية — 5 بطاقات mini */
+.home-ruhani-row {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+/* تنبيهات اللون لطيفة */
+.bustan-home-card.state-dormant .bustan-home-state { color: var(--err); }
+.bustan-home-card.state-wilting .bustan-home-state { color: var(--warn); }
+.bustan-home-card.state-renewed .bustan-home-state { color: var(--ok); }
